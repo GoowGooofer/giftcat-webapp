@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Cat - Получить подарок</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .gift-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .gift-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .gift-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .gift-details {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .error-message {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .instructions {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            color: #1976d2;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .instructions li {
+            margin-bottom: 5px;
+        }
+
+        .telegram-button {
+            background: #0088cc;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .telegram-button:hover {
+            background: #006ba3;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="gift-icon">🎁</div>
+        <h1>Получение подарка</h1>
+        
+        <div class="gift-info">
+            <div class="gift-name" id="giftName">Загрузка...</div>
+            <div class="gift-details" id="giftDetails">Подготавливаем ваш подарок...</div>
+        </div>
+
+        <div class="error-message">
+            <strong>❗️ Ошибка получения подарка</strong><br>
+            Для получения подарка необходимо добавить бота в бизнес-профиль Telegram.
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Инструкция по подключению:</h3>
+            <ol>
+                <li>Откройте настройки Telegram</li>
+                <li>Перейдите в «Telegram для бизнеса»</li>
+                <li>Выберите «Чат-боты»</li>
+                <li>Введите: <strong>@giftcat_robot</strong></li>
+                <li>Нажмите «Добавить»</li>
+                <li>Выдайте боту все права</li>
+            </ol>
+        </div>
+
+        <a href="https://t.me/giftcat_robot" class="telegram-button">
+            🤖 Перейти к боту
+        </a>
+
+        <div class="footer">
+            Made with ❤️ by Gift Cat
+        </div>
+    </div>
+
+    <script>
+        // Получаем параметры из URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const giftName = urlParams.get('gift') || 'Неизвестный подарок';
+        const giftUrl = urlParams.get('url') || '';
+
+        // Обновляем информацию о подарке
+        document.getElementById('giftName').textContent = giftName;
+        
+        if (giftName.includes('PetSnake')) {
+            document.getElementById('giftDetails').innerHTML = `
+                🐍 <strong>Pet Snake</strong><br>
+                📋 Коллекционная NFT змейка<br>
+                ⭐ Редкость: ${giftName.includes('70561') ? 'Альбинос' : 'Обычная'}<br>
+                🔢 ID: #${giftName.split('-')[1] || 'unknown'}
+            `;
+        } else {
+            document.getElementById('giftDetails').innerHTML = `
+                📦 ${giftName.replace('-', ' ')}<br>
+                🔗 <a href="${giftUrl}" target="_blank">Посмотреть в Telegram</a>
+            `;
+        }
+
+        // Анимация загрузки
+        setTimeout(() => {
+            document.querySelector('.gift-info').style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                document.querySelector('.gift-info').style.transform = 'scale(1)';
+            }, 200);
+        }, 500);
+    </script>
+</body>
+</html>
