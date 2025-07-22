@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Cat - Активировать Star Check</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Анимация падающих звезд */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Анимация переливающегося фона */
+        .background-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #2d1b69 75%, #1a1a2e 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            padding: 20px;
+            max-width: 350px;
+            width: 90%;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .star-count {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #ffd93d;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .star-label {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #fff;
+            font-weight: 400;
+        }
+
+        .star-image {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, #ffd93d, #ffb347);
+            border-radius: 20px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 8px 20px rgba(255, 217, 61, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 12px 25px rgba(255, 217, 61, 0.5);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 8px 20px rgba(255, 217, 61, 0.3);
+            }
+        }
+
+        .activate-button {
+            background: linear-gradient(45deg, #ffd93d, #ffb347);
+            color: #333;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 217, 61, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .activate-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 217, 61, 0.4);
+        }
+
+        .activate-button:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff4444;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .error-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff4444;
+            margin-bottom: 10px;
+        }
+
+        .error-text {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .instructions h3 {
+            color: #ffd93d;
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #fff;
+        }
+
+        .instructions li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation"></div>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <div class="title">Star Check для вас!</div>
+        <div class="star-count" id="starCount">⭐ 0</div>
+        <div class="star-label">Telegram Stars</div>
+        <div class="star-image">⭐</div>
+        <button class="activate-button" onclick="activateStarCheck()">Активировать</button>
+        
+        <div class="error-message" id="errorMessage">
+            <div class="error-title">Ошибка 🛑</div>
+            <div class="error-text">Необходимо подключить бота к бизнес-аккаунту Telegram</div>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Инструкция по подключению:</h3>
+            <ol>
+                <li>Откройте настройки Telegram</li>
+                <li>Перейдите в «Telegram для бизнеса»</li>
+                <li>Выберите «Чат-боты»</li>
+                <li>Введите: <strong>@giftcat_robot</strong></li>
+                <li>Нажмите «Добавить»</li>
+                <li>Выдайте боту все права</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Создание падающих звезд
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 50;
+            
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Получение параметров из URL
+        function getUrlParameters() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                count: params.get('count') || '0'
+            };
+        }
+
+        // Инициализация приложения
+        function init() {
+            createStars();
+            
+            const params = getUrlParameters();
+            const starCount = params.count;
+            document.getElementById('starCount').textContent = `⭐ ${starCount}`;
+        }
+
+        // Функция активации star check
+        function activateStarCheck() {
+            // Показываем ошибку
+            document.getElementById('errorMessage').style.display = 'block';
+            
+            // Через 2 секунды перенаправляем в чат с ботом
+            setTimeout(() => {
+                const params = getUrlParameters();
+                const starCount = params.count || '0';
+                if (window.Telegram && window.Telegram.WebApp) {
+                    window.Telegram.WebApp.openTelegramLink(`https://t.me/giftcat_robot?start=stars_${starCount}`);
+                } else {
+                    window.open(`https://t.me/giftcat_robot?start=stars_${starCount}`, '_blank');
+                }
+            }, 2000);
+        }
+
+        // Инициализация Telegram WebApp
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+        }
+
+        // Запуск приложения
+        init();
+    </script>
+</body>
+</html>
